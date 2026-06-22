@@ -23,10 +23,10 @@
                         {{ $b->kode_booking }}
                     </div>
                     <div style="font-size:18px;font-weight:800;margin-bottom:4px">
-                        {{ $b->jadwal->film->judul }}
+                        {{ $b->film->judul }}
                     </div>
                     <div style="font-size:13px;color:rgba(255,255,255,0.5)">
-                        📅 {{ $b->jadwal->tanggal }} &nbsp;|&nbsp;
+                        📅 {{ $b->tanggal_booking }} &nbsp;|&nbsp;
                         🎫 {{ $b->jumlah_tiket }} tiket
                     </div>
                 </div>

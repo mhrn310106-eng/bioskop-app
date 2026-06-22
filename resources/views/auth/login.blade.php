@@ -111,6 +111,38 @@
             font-size: 13px;
             margin-bottom: 20px;
         }
+
+        /* RESPONSIVE - TABLET */
+        @media (max-width: 992px) {
+            .left-panel { width: 40%; padding: 40px; }
+            .right-panel { width: 60%; padding: 40px; }
+            .left-title { font-size: 32px; }
+        }
+
+        /* RESPONSIVE - MOBILE */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .left-panel {
+                width: 100%;
+                min-height: auto;
+                padding: 40px 24px 32px;
+            }
+            .left-title { font-size: 28px; }
+            .right-panel {
+                width: 100%;
+                padding: 32px 24px 48px;
+            }
+            .form-title { font-size: 26px; }
+            .form-subtitle { margin-bottom: 24px; }
+        }
+
+        @media (max-width: 480px) {
+            .left-panel { padding: 32px 20px 24px; }
+            .left-title { font-size: 24px; }
+            .left-desc { font-size: 13px; }
+            .right-panel { padding: 24px 20px 40px; }
+            .form-title { font-size: 22px; }
+        }
     </style>
 </head>
 <body>

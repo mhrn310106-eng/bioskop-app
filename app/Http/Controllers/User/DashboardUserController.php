@@ -18,11 +18,16 @@ class DashboardUserController extends Controller {
     }
 
     public function jadwal($film_id) {
-        $film    = Film::findOrFail($film_id);
-        $jadwals = Jadwal::with('studio')
-            ->where('film_id', $film_id)
-            ->whereDate('tanggal','>=',now())->get();
-        return view('user.jadwal', compact('film','jadwals'));
+    $film = Film::findOrFail($film_id);
+    
+    $tanggalTersedia = Jadwal::with('studio')
+        ->where('film_id', $film_id)
+        ->whereDate('tanggal', '>=', now())
+        ->select('tanggal')
+        ->distinct()
+        ->orderBy('tanggal', 'asc')
+        ->get();
+    return view('user.jadwal', compact('film', 'tanggalTersedia'));
     }
 
     public function profil() {
@@ -51,5 +56,7 @@ class DashboardUserController extends Controller {
     ]);
 
     return back()->with('success', 'Password berhasil diubah!');
-}
+    }
+
+    
 }

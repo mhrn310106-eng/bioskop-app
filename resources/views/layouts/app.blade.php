@@ -21,6 +21,8 @@
             top: 0; left: 0;
             display: flex;
             flex-direction: column;
+            z-index: 1000;
+            transition: transform 0.3s ease;
         }
         .sidebar-brand {
             font-size: 22px;
@@ -98,6 +100,54 @@
             padding: 32px;
             background: #0a0a0f;
         }
+
+        /* MOBILE TOPBAR */
+        .mobile-topbar {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: #0f0f18;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            z-index: 999;
+            padding: 0 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .mobile-topbar-brand {
+            font-size: 18px;
+            font-weight: 900;
+            color: #fff;
+        }
+        .mobile-topbar-brand span { color: #f5c518; }
+        .btn-hamburger {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+        .sidebar-close {
+            display: none;
+            position: absolute;
+            top: 16px; right: 16px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* OVERLAY */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 999;
+        }
+        .sidebar-overlay.show { display: block; }
 
         /* CARD */
         .card-admin {
@@ -246,12 +296,92 @@
         .pagination .page-link { background: #16161f; border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); border-radius: 8px; margin: 0 2px; font-size: 13px; }
         .pagination .page-item.active .page-link { background: #f5c518; border-color: #f5c518; color: #0a0a0f; font-weight: 700; }
         .pagination .page-link:hover { background: rgba(245,197,24,0.1); color: #f5c518; border-color: rgba(245,197,24,0.3); }
+
+        /* Pagination wrapper - Bootstrap 5 Laravel */
+        nav.d-flex.justify-content-between {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 12px;
+        }
+        nav.d-flex.justify-content-between > div.d-none.d-sm-flex {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 10px;
+            width: 100%;
+        }
+        nav.d-flex.justify-content-between > div.d-none.d-sm-flex > div.small.text-muted {
+            order: 2;
+            color: rgba(255,255,255,0.4) !important;
+            font-size: 13px;
+        }
+        nav.d-flex.justify-content-between > div.d-none.d-sm-flex > div:last-child {
+            order: 1;
+        }
+
+        /* ══════════════════════════════════════════
+           RESPONSIVE - TABLET (≤ 992px)
+           ══════════════════════════════════════════ */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .sidebar-close { display: block; }
+            .mobile-topbar { display: flex; }
+            .main-content {
+                margin-left: 0;
+                padding-top: 72px;
+            }
+        }
+
+        /* ══════════════════════════════════════════
+           RESPONSIVE - MOBILE (≤ 576px)
+           ══════════════════════════════════════════ */
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 64px 12px 16px;
+            }
+            .card-admin {
+                padding: 16px;
+                border-radius: 12px;
+            }
+            .table-admin thead th,
+            .table-admin tbody td {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .row.g-3 .col-md-3 {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
     </style>
 </head>
 <body>
 
+<!-- MOBILE TOPBAR -->
+<div class="mobile-topbar">
+    <button class="btn-hamburger" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i>
+    </button>
+    <div class="mobile-topbar-brand">ROYAL<span>THEATER</span></div>
+    <div style="width:40px"></div>
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
 <!-- SIDEBAR -->
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
+    <button class="sidebar-close" onclick="toggleSidebar()">
+        <i class="bi bi-x-lg"></i>
+    </button>
     <div class="sidebar-brand">ROYAL<span>THEATER</span><br>
         <span style="font-size:11px;font-weight:400;color:rgba(255,255,255,0.3)">Admin Panel</span>
     </div>
@@ -309,5 +439,11 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('show');
+        document.getElementById('sidebarOverlay').classList.toggle('show');
+    }
+</script>
 </body>
 </html>

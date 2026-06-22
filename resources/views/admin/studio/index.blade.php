@@ -15,7 +15,7 @@
         <tbody>
         @forelse($studios as $s)
         <tr>
-            <td style="color:rgba(255,255,255,0.3)">{{ $loop->iteration }}</td>
+            <td style="color:rgba(255,255,255,0.3)">{{ $studios->firstItem() + $loop->index }}</td>
             <td style="font-weight:700">{{ $s->nama }}</td>
             <td><span class="badge-info">{{ $s->kapasitas }} kursi</span></td>
             <td>

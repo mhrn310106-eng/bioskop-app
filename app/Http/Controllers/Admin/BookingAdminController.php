@@ -12,13 +12,11 @@ use Illuminate\Http\Request;
 class BookingAdminController extends Controller {
 
     public function index(Request $request) {
-    $query = Booking::with(['user','jadwal.film','jadwal.studio']);
+    $query = Booking::with(['user','film','studio']);
 
     // Filter tanggal
     if ($request->filled('tanggal')) {
-        $query->whereHas('jadwal', function($q) use ($request) {
-            $q->whereDate('tanggal', $request->tanggal);
-        });
+    $query->whereDate('tanggal_booking', $request->tanggal);
     }
 
     // Filter status bayar
@@ -60,14 +58,26 @@ class BookingAdminController extends Controller {
     }
 
     // Export Excel
-    public function exportExcel() {
-        return Excel::download(new BookingExport, 'laporan-booking-'.date('d-m-Y').'.xlsx');
+    public function exportExcel(Request $request) {
+        $filters = $request->only(['tanggal', 'status_bayar', 'status']);
+        return Excel::download(new BookingExport($filters), 'laporan-booking-'.date('d-m-Y').'.xlsx');
     }
 
     // Export PDF
-    public function exportPdf() {
-        $bookings = Booking::with(['user','jadwal.film','jadwal.studio','kursis'])
-                    ->latest()->get();
+    public function exportPdf(Request $request) {
+        $query = Booking::with(['user','film','studio','kursis']);
+
+        if ($request->filled('tanggal')) {
+            $query->whereDate('tanggal_booking', $request->tanggal);
+        }
+        if ($request->filled('status_bayar')) {
+            $query->where('status_bayar', $request->status_bayar);
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $bookings = $query->latest()->get();
         $pdf = Pdf::loadView('admin.booking.pdf', compact('bookings'))
                   ->setPaper('a4', 'landscape');
         return $pdf->download('laporan-booking-'.date('d-m-Y').'.pdf');

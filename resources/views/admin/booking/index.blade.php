@@ -8,11 +8,11 @@
     </div>
     <!-- Tombol Export -->
     <div class="d-flex gap-2">
-        <a href="/admin/booking/export/excel"
+        <a href="/admin/booking/export/excel?{{ http_build_query(request()->only(['tanggal','status_bayar','status'])) }}"
             style="background:rgba(34,197,94,0.12);color:#4ade80;border:1px solid rgba(34,197,94,0.3);padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;transition:all 0.3s">
             📊 Export Excel
         </a>
-        <a href="/admin/booking/export/pdf"
+        <a href="/admin/booking/export/pdf?{{ http_build_query(request()->only(['tanggal','status_bayar','status'])) }}"
             style="background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.3);padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;transition:all 0.3s">
             📄 Export PDF
         </a>
@@ -93,10 +93,10 @@
                     {{ $b->user->name }}
                 </td>
                 <td style="font-weight:700;vertical-align:middle;line-height:1.5">
-                    {{ $b->jadwal->film->judul }}
+                    {{ $b->film->judul }}
                 </td>
                 <td style="vertical-align:middle">
-                    {{ $b->jadwal->tanggal }}
+                    {{ $b->tanggal_booking }}
                 </td>
                 <td style="vertical-align:middle">
                     {{ $b->jumlah_tiket }} tiket

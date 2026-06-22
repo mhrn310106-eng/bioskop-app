@@ -30,13 +30,14 @@
             <!-- DETAIL -->
             <div style="padding:32px">
                 @foreach([
-                    ['Film', $booking->jadwal->film->judul],
-                    ['Tanggal', $booking->jadwal->tanggal],
-                    ['Jam', substr($booking->jadwal->jam_tayang,0,5)],
-                    ['Studio', $booking->jadwal->studio->nama],
+                    ['Film', $booking->film->judul],
+                    ['Tanggal', $booking->tanggal_booking],
+                    ['Jam', substr($booking->jam_booking, 0, 5)],
+                    ['Studio', $booking->studio->nama ?? 'Studio Reguler'],
                     ['Kursi', $booking->kursis->pluck('nomor_kursi')->join(', ')],
                     ['Jumlah Tiket', $booking->jumlah_tiket.' tiket'],
                 ] as $row)
+
                 <div class="d-flex justify-content-between mb-3">
                     <span style="color:rgba(255,255,255,0.45);font-size:14px">{{ $row[0] }}</span>
                     <span style="font-weight:600;font-size:14px;text-align:right;max-width:60%">{{ $row[1] }}</span>
@@ -94,3 +95,4 @@
     </div>
 </div>
 @endsection
+

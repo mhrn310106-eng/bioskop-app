@@ -24,7 +24,7 @@
                     <div class="film-card-meta mb-3" style="font-size:11px">
                         {{ Str::limit($f->sinopsis, 70) }}
                     </div>
-                    <a href="/user/jadwal/{{ $f->id }}" class="btn-ticket">🎫 Beli Tiket</a>
+                    <a href="/user/booking/{{ $f->id }}" class="btn-ticket">Pesan Tiket</a>
                 </div>
             </div>
         </div>

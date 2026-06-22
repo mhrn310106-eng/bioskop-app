@@ -118,23 +118,23 @@
         </div>
         <div class="detail-row">
             <span class="detail-label">Film : </span>
-            <span class="detail-value">{{ $booking->jadwal->film->judul }}</span>
+            <span class="detail-value">{{ $booking->film->judul }}</span>
         </div>
         <div class="detail-row">
             <span class="detail-label">Genre : </span>
-            <span class="detail-value">{{ $booking->jadwal->film->genre }}</span>
+            <span class="detail-value">{{ $booking->film->genre }}</span>
         </div>
         <div class="detail-row">
             <span class="detail-label">Tanggal Tayang : </span>
-            <span class="detail-value">{{ $booking->jadwal->tanggal }}</span>
+            <span class="detail-value">{{ $booking->tanggal_booking }}</span>
         </div>
         <div class="detail-row">
             <span class="detail-label">Jam Tayang : </span>
-            <span class="detail-value">{{ substr($booking->jadwal->jam_tayang, 0, 5) }} WIB</span>
+            <span class="detail-value">{{ substr($booking->jam_booking, 0, 5) }} WIB</span>
         </div>
         <div class="detail-row">
             <span class="detail-label">Studio : </span>
-            <span class="detail-value">{{ $booking->jadwal->studio->nama }}</span>
+            <span class="detail-value">{{ $booking->studio->nama ?? 'Studio Reguler' }}</span>
         </div>
         <div class="detail-row">
             <span class="detail-label">Nomor Kursi : </span>
@@ -173,3 +173,4 @@
 
 </body>
 </html>
+

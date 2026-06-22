@@ -12,7 +12,7 @@ class DashboardAdminController extends Controller {
         $pendapatanHariIni = Booking::whereDate('created_at', Carbon::today())
             ->where('status','confirmed')->sum('total_harga');
         $jadwalHariIni   = Jadwal::whereDate('tanggal', Carbon::today())->count();
-        $bookingTerbaru  = Booking::with(['user','jadwal.film'])->latest()->take(5)->get();
+        $bookingTerbaru  = Booking::with(['user','film'])->latest()->take(5)->get();
 
         return view('admin.dashboard', compact(
             'totalFilm','totalBooking','totalUser',

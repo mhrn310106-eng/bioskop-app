@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('kursis', function (Blueprint $table) {
     $table->id();
     $table->foreignId('booking_id')->constrained()->onDelete('cascade');
-    $table->foreignId('jadwal_id')->constrained()->onDelete('cascade');
-    $table->string('nomor_kursi'); // contoh: A1, B3
+    $table->string('nomor_kursi');
     $table->timestamps();
 });
 

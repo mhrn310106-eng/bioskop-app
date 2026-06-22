@@ -16,7 +16,7 @@
             <tbody>
             @forelse($jadwals as $j)
             <tr>
-                <td style="color:rgba(255,255,255,0.3)">{{ $loop->iteration }}</td>
+                <td style="color:rgba(255,255,255,0.3)">{{ $jadwals->firstItem() + $loop->index }}</td>
                 <td style="font-weight:700">{{ $j->film->judul }}</td>
                 <td>{{ $j->studio->nama }}</td>
                 <td>{{ $j->tanggal }}</td>

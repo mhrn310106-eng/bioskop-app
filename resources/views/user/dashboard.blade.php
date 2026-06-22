@@ -51,7 +51,7 @@
                 <span class="badge-genre mb-2 d-inline-block">{{ $f->genre }}</span>
                 <div class="film-card-title">{{ $f->judul }}</div>
                 <div class="film-card-meta mb-2">⏱ {{ $f->durasi }} menit</div>
-                <a href="/user/jadwal/{{ $f->id }}" class="btn-ticket">🎫 Beli Tiket</a>
+                <a href="/user/booking/{{ $f->id }}" class="btn-ticket">Pesan Tiket</a>
             </div>
         </div>
         @empty

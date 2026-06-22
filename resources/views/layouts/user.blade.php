@@ -21,7 +21,8 @@
             top: 0; left: 0;
             display: flex;
             flex-direction: column;
-            z-index: 100;
+            z-index: 1000;
+            transition: transform 0.3s ease;
         }
         .sidebar-brand {
             font-size: 22px;
@@ -93,6 +94,54 @@
             margin-top: 12px;
         }
         .btn-logout:hover { background: rgba(239,68,68,0.2); }
+
+        /* MOBILE TOPBAR */
+        .mobile-topbar {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: #0f0f18;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            z-index: 999;
+            padding: 0 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .mobile-topbar-brand {
+            font-size: 18px;
+            font-weight: 900;
+            color: #fff;
+        }
+        .mobile-topbar-brand span { color: #f5c518; }
+        .btn-hamburger {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+        .sidebar-close {
+            display: none;
+            position: absolute;
+            top: 16px; right: 16px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* OVERLAY */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 999;
+        }
+        .sidebar-overlay.show { display: block; }
 
         /* MAIN CONTENT */
         .main-content {
@@ -186,6 +235,27 @@
             color: #f5c518;
         }
 
+        /* Pagination wrapper - Bootstrap 5 Laravel */
+        nav.d-flex.justify-content-between {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 12px;
+        }
+        nav.d-flex.justify-content-between > div.d-none.d-sm-flex {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 10px;
+            width: 100%;
+        }
+        nav.d-flex.justify-content-between > div.d-none.d-sm-flex > div.small.text-muted {
+            order: 2;
+            color: rgba(255,255,255,0.4) !important;
+            font-size: 13px;
+        }
+        nav.d-flex.justify-content-between > div.d-none.d-sm-flex > div:last-child {
+            order: 1;
+        }
+
         /* FOOTER */
         .footer-custom {
             background: #0d0d14;
@@ -194,12 +264,78 @@
             margin-top: 60px;
         }
         .footer-text { color:rgba(255,255,255,0.4); font-size:13px; }
+
+        /* ══════════════════════════════════════════
+           RESPONSIVE - TABLET (≤ 992px)
+           ══════════════════════════════════════════ */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .sidebar-close { display: block; }
+            .mobile-topbar { display: flex; }
+            .main-content {
+                margin-left: 0;
+                padding-top: 56px;
+            }
+            .film-card img {
+                height: 220px;
+            }
+        }
+
+        /* ══════════════════════════════════════════
+           RESPONSIVE - MOBILE (≤ 576px)
+           ══════════════════════════════════════════ */
+        @media (max-width: 576px) {
+            .container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            .section-title {
+                font-size: 18px;
+            }
+            .film-card img {
+                height: 180px;
+            }
+            .film-card-body {
+                padding: 10px;
+            }
+            .film-card-title {
+                font-size: 13px;
+            }
+            .footer-custom {
+                padding: 20px 16px;
+            }
+            .footer-custom .d-flex {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
 
+<!-- MOBILE TOPBAR -->
+<div class="mobile-topbar">
+    <button class="btn-hamburger" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i>
+    </button>
+    <div class="mobile-topbar-brand">ROYAL<span>THEATER</span></div>
+    <div style="width:40px"></div>
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
 <!-- SIDEBAR -->
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
+    <button class="sidebar-close" onclick="toggleSidebar()">
+        <i class="bi bi-x-lg"></i>
+    </button>
     <a href="/user/dashboard" class="sidebar-brand">
         ROYAL<span>THEATER</span><br>
         <span style="font-size:11px;font-weight:400;color:rgba(255,255,255,0.3)">Member Area</span>
@@ -270,5 +406,21 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('show');
+        document.getElementById('sidebarOverlay').classList.toggle('show');
+    }
+
+    // Auto-close sidebar when a nav link is clicked (mobile)
+    document.querySelectorAll('.nav-link-user').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 992) {
+                document.getElementById('sidebar').classList.remove('show');
+                document.getElementById('sidebarOverlay').classList.remove('show');
+            }
+        });
+    });
+</script>
 </body>
 </html>

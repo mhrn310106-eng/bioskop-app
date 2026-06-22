@@ -59,11 +59,13 @@ Route::post('/logout',  [AuthController::class, 'logout'])->name('logout');
     Route::prefix('user')->middleware('user')->group(function () {
     Route::get('/dashboard',              [DashboardUserController::class, 'index']);
     Route::get('/film',                   [DashboardUserController::class, 'film']);
-    Route::get('/jadwal/{film_id}',        [DashboardUserController::class, 'jadwal']);
+    
+    
 
     // Booking
-    Route::get('/booking/{jadwal_id}',     [BookingUserController::class, 'create']);
-    Route::post('/booking/{jadwal_id}',    [BookingUserController::class, 'store']);
+    Route::get('/booking/kursi-terpakai/{film_id}', [BookingUserController::class, 'kursiTerpakai']);
+    Route::get('/booking/{film_id}',       [BookingUserController::class, 'create']);
+    Route::post('/booking/{film_id}',      [BookingUserController::class, 'store']);
     Route::get('/booking/detail/{id}',     [BookingUserController::class, 'detail']);
     Route::get('/booking/cancel/{id}',     [BookingUserController::class, 'cancel']);
     Route::get('/riwayat',                 [BookingUserController::class, 'riwayat']);
@@ -74,7 +76,6 @@ Route::post('/logout',  [AuthController::class, 'logout'])->name('logout');
     // Pembayaran
     Route::get('/booking/bayar/{id}',   [BookingUserController::class, 'bayar']);
     Route::post('/booking/bayar/{id}',  [BookingUserController::class, 'uploadBukti']);
-
     Route::get('/booking/cetak/{id}', [BookingUserController::class, 'cetakPdf']);
     
 });

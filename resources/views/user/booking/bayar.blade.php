@@ -14,10 +14,10 @@
                 <h5 style="font-weight:800;color:#f5c518;margin-bottom:20px">🎫 Detail Booking</h5>
                 <div style="display:flex;flex-direction:column;gap:12px">
                     @foreach([
-                        ['Film', $booking->jadwal->film->judul],
-                        ['Tanggal', $booking->jadwal->tanggal],
-                        ['Jam', substr($booking->jadwal->jam_tayang,0,5)],
-                        ['Studio', $booking->jadwal->studio->nama],
+                        ['Film', $booking->film->judul],
+                    ['Tanggal', $booking->tanggal_booking],
+                    ['Jam', substr($booking->jam_booking, 0, 5)],
+                    ['Studio', $booking->studio->nama ?? 'Studio Reguler'],
                         ['Kursi', $booking->kursis->pluck('nomor_kursi')->join(', ')],
                         ['Jumlah Tiket', $booking->jumlah_tiket.' tiket'],
                     ] as $row)

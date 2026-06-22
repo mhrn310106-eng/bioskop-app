@@ -11,19 +11,42 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class BookingExport implements FromCollection, WithHeadings, WithStyles, WithColumnWidths
 {
+    protected $filters;
+
+    public function __construct(array $filters = [])
+    {
+        $this->filters = $filters;
+    }
+
     public function collection()
     {
-        return Booking::with(['user','jadwal.film','jadwal.studio','kursis'])
-            ->latest()->get()->map(function($b, $i) {
+        $query = Booking::with(['user','film','studio','kursis']);
+
+        // Filter tanggal
+        if (!empty($this->filters['tanggal'])) {
+            $query->whereDate('tanggal_booking', $this->filters['tanggal']);
+        }
+
+        // Filter status bayar
+        if (!empty($this->filters['status_bayar'])) {
+            $query->where('status_bayar', $this->filters['status_bayar']);
+        }
+
+        // Filter status booking
+        if (!empty($this->filters['status'])) {
+            $query->where('status', $this->filters['status']);
+        }
+
+        return $query->latest()->get()->map(function($b, $i) {
                 return [
                     'No'           => $i + 1,
                     'Kode Booking' => $b->kode_booking,
                     'Pengguna'     => $b->user->name,
                     'Email'        => $b->user->email,
-                    'Film'         => $b->jadwal->film->judul,
-                    'Studio'       => $b->jadwal->studio->nama,
-                    'Tanggal'      => $b->jadwal->tanggal,
-                    'Jam'          => substr($b->jadwal->jam_tayang, 0, 5),
+                    'Film'         => $b->film->judul,
+                    'Studio'       => $b->studio->nama ?? '-',
+                    'Tanggal'      => $b->tanggal_booking,
+                    'Jam'          => substr($b->jam_booking, 0, 5),
                     'Kursi'        => $b->kursis->pluck('nomor_kursi')->join(', '),
                     'Jumlah Tiket' => $b->jumlah_tiket,
                     'Total Harga'  => 'Rp '.number_format($b->total_harga),

@@ -1,96 +1,143 @@
 @extends('layouts.user')
 @section('content')
 <div class="container py-5">
-    <h2 style="font-weight:900;margin-bottom:4px">🎫 Pilih Kursi</h2>
-    <p style="color:rgba(255,255,255,0.5);margin-bottom:32px">
-        {{ $jadwal->film->judul }} &nbsp;|&nbsp;
-        {{ $jadwal->tanggal }} {{ substr($jadwal->jam_tayang,0,5) }} &nbsp;|&nbsp;
-        {{ $jadwal->studio->nama }}
-    </p>
-
-    <form action="/user/booking/{{ $jadwal->id }}" method="POST">
-    @csrf
-    <div style="background:#16161f;border-radius:20px;padding:32px;margin-bottom:24px">
-
-        <!-- LAYAR -->
-        <div style="background:linear-gradient(90deg,transparent,rgba(245,197,24,0.3),transparent);height:4px;border-radius:2px;margin-bottom:8px"></div>
-        <p style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;margin-bottom:32px;letter-spacing:4px">LAYAR</p>
-
-        <!-- KURSI -->
-        <div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
-            @foreach($allKursi as $k)
-                @if(in_array($k, $kursiBooked))
-                    <button type="button"
-                        style="width:48px;height:48px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:rgba(255,255,255,0.2);font-size:12px;font-weight:600;cursor:not-allowed"
-                        disabled>{{ $k }}</button>
-                @else
-                    <input type="checkbox" name="kursi[]" value="{{ $k }}"
-                        id="k{{ $k }}" class="d-none kursi-check">
-                    <label for="k{{ $k }}"
-                        style="width:48px;height:48px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.4);border-radius:8px;color:#4ade80;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s"
-                        class="kursi-label">{{ $k }}</label>
-                @endif
-            @endforeach
-        </div>
-
-        <!-- LEGEND -->
-        <div class="d-flex gap-4 justify-content-center" style="font-size:12px;color:rgba(255,255,255,0.5)">
-            <span style="display:flex;align-items:center;gap:6px">
-                <span style="width:16px;height:16px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.4);border-radius:4px;display:inline-block"></span>
-                Tersedia
-            </span>
-            <span style="display:flex;align-items:center;gap:6px">
-                <span style="width:16px;height:16px;background:#f5c518;border-radius:4px;display:inline-block"></span>
-                Dipilih
-            </span>
-            <span style="display:flex;align-items:center;gap:6px">
-                <span style="width:16px;height:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:4px;display:inline-block"></span>
-                Terisi
-            </span>
-        </div>
+    <div class="mb-4">
+        <h2 class="section-title">Booking Tiket Bioskop</h2>
+        <p class="section-subtitle">Pilih tanggal, jam tayang, dan kursi sesuai keinginan kamu.</p>
     </div>
 
-    <!-- SUMMARY -->
-    <div style="background:#16161f;border-radius:16px;padding:24px;margin-bottom:24px">
-        <div class="d-flex justify-content-between mb-2">
-            <span style="color:rgba(255,255,255,0.5)">Kursi dipilih</span>
-            <span style="font-weight:700" id="count">0 kursi</span>
+    <div class="card p-4" style="background:#16161f;border:1px solid rgba(255,255,255,0.08);border-radius:16px;">
+        <div class="mb-4">
+            <h4 style="color:#fff;font-weight:800;">{{ $film->judul }}</h4>
+            <p style="color:rgba(255,255,255,0.6);margin-bottom:0;">
+                Genre: {{ $film->genre }} | Durasi: {{ $film->durasi }} menit
+            </p>
         </div>
-        <div class="d-flex justify-content-between mb-2">
-            <span style="color:rgba(255,255,255,0.5)">Harga per kursi</span>
-            <span style="font-weight:700">Rp {{ number_format($jadwal->harga) }}</span>
-        </div>
-        <hr style="border-color:rgba(255,255,255,0.08)">
-        <div class="d-flex justify-content-between">
-            <span style="font-size:18px;font-weight:700">Total</span>
-            <span style="font-size:22px;font-weight:900;color:#f5c518" id="total">Rp 0</span>
-        </div>
-    </div>
 
-    <button type="submit" style="background:#f5c518;color:#0a0a0f;border:none;padding:16px;border-radius:12px;font-weight:800;font-size:16px;width:100%;cursor:pointer;transition:all 0.3s">
-        🎫 Konfirmasi Booking
-    </button>
-    </form>
+        <form action="/user/booking/{{ $film->id }}" method="POST">
+            @csrf
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label" style="color:#f5c518;font-weight:700;">Pilih Tanggal</label>
+                    <input type="date"
+                           name="tanggal_booking"
+                           id="tanggal_booking"
+                           class="form-control"
+                           min="{{ date('Y-m-d') }}"
+                           required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" style="color:#f5c518;font-weight:700;">Pilih Jam</label>
+                    <input type="time"
+                           name="jam_booking"
+                           id="jam_booking"
+                           class="form-control"
+                           required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" style="color:#f5c518;font-weight:700;">Pilih Kursi</label>
+
+                <div id="kursi-info" style="text-align:center;margin-bottom:12px;font-size:13px;color:rgba(255,255,255,0.4);display:none;">
+                    <span style="display:inline-flex;align-items:center;gap:6px;margin-right:16px;">
+                        <span style="width:14px;height:14px;background:rgba(239,68,68,0.5);border:1px solid #f87171;border-radius:3px;display:inline-block;"></span> Sudah dipesan
+                    </span>
+                    <span style="display:inline-flex;align-items:center;gap:6px;">
+                        <span style="width:14px;height:14px;background:rgba(245,197,24,0.15);border:1px solid rgba(245,197,24,0.5);border-radius:3px;display:inline-block;"></span> Tersedia
+                    </span>
+                </div>
+
+                <div class="mb-3 text-center">
+                    <div style="background:#f5c518;color:#0a0a0f;padding:8px;border-radius:8px;font-weight:800;">
+                        LAYAR BIOSKOP
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 justify-content-center" id="kursi-container">
+                    @foreach($allKursi as $kursi)
+                        <div>
+                            <input type="checkbox"
+                                   class="btn-check kursi-checkbox"
+                                   name="kursi[]"
+                                   id="kursi{{ $kursi }}"
+                                   value="{{ $kursi }}">
+
+                            <label class="btn btn-outline-warning"
+                                   for="kursi{{ $kursi }}"
+                                   id="label-kursi{{ $kursi }}"
+                                   style="width:55px;">
+                                {{ $kursi }}
+                            </label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn-ticket">
+                    Booking Sekarang
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>
-const harga = {{ $jadwal->harga }};
-document.querySelectorAll('.kursi-check').forEach(cb => {
-    cb.addEventListener('change', function() {
-        const lbl = document.querySelector('label[for="' + this.id + '"]');
-        if (this.checked) {
-            lbl.style.background = '#f5c518';
-            lbl.style.borderColor = '#f5c518';
-            lbl.style.color = '#0a0a0f';
-        } else {
-            lbl.style.background = 'rgba(34,197,94,0.1)';
-            lbl.style.borderColor = 'rgba(34,197,94,0.4)';
-            lbl.style.color = '#4ade80';
+    const filmId = {{ $film->id }};
+    const tanggalInput = document.getElementById('tanggal_booking');
+    const jamInput = document.getElementById('jam_booking');
+    const kursiInfo = document.getElementById('kursi-info');
+
+    function cekKursiTerpakai() {
+        const tanggal = tanggalInput.value;
+        const jam = jamInput.value;
+
+        // Reset semua kursi
+        document.querySelectorAll('.kursi-checkbox').forEach(cb => {
+            cb.disabled = false;
+            cb.checked = false;
+            const label = document.getElementById('label-' + cb.id);
+            if (label) {
+                label.style.opacity = '1';
+                label.style.cursor = 'pointer';
+                label.style.background = '';
+                label.style.borderColor = '';
+                label.style.color = '';
+            }
+        });
+
+        if (!tanggal || !jam) {
+            kursiInfo.style.display = 'none';
+            return;
         }
-        const checked = document.querySelectorAll('.kursi-check:checked').length;
-        document.getElementById('count').textContent = checked + ' kursi';
-        document.getElementById('total').textContent = 'Rp ' + (checked * harga).toLocaleString('id-ID');
-    });
-});
+
+        fetch(`/user/booking/kursi-terpakai/${filmId}?tanggal=${tanggal}&jam=${jam}`)
+            .then(res => res.json())
+            .then(kursiTerpakai => {
+                kursiInfo.style.display = 'block';
+
+                kursiTerpakai.forEach(nomor => {
+                    const cb = document.getElementById('kursi' + nomor);
+                    if (cb) {
+                        cb.disabled = true;
+                        cb.checked = false;
+                        const label = document.getElementById('label-kursi' + nomor);
+                        if (label) {
+                            label.style.opacity = '0.5';
+                            label.style.cursor = 'not-allowed';
+                            label.style.background = 'rgba(239,68,68,0.2)';
+                            label.style.borderColor = '#f87171';
+                            label.style.color = '#f87171';
+                        }
+                    }
+                });
+            });
+    }
+
+    tanggalInput.addEventListener('change', cekKursiTerpakai);
+    jamInput.addEventListener('change', cekKursiTerpakai);
 </script>
 @endsection

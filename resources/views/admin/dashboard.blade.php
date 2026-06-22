@@ -77,7 +77,7 @@
                 <tr>
                     <td style="font-family:monospace;color:#f5c518">{{ $b->kode_booking }}</td>
                     <td>{{ $b->user->name }}</td>
-                    <td>{{ $b->jadwal->film->judul }}</td>
+                    <td>{{ $b->film->judul }}</td>
                     <td style="font-weight:700">Rp {{ number_format($b->total_harga) }}</td>
                     <td>
                         @if($b->status=='confirmed')

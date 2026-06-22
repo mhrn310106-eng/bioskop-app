@@ -122,8 +122,8 @@
                 <td>{{ $loop->iteration }}</td>
                 <td style="font-weight:700;color:#1a237e">{{ $b->kode_booking }}</td>
                 <td>{{ $b->user->name }}</td>
-                <td>{{ $b->jadwal->film->judul }}</td>
-                <td>{{ $b->jadwal->tanggal }}</td>
+                <td>{{ $b->film->judul }}</td>
+                <td>{{ $b->tanggal_booking }}</td>
                 <td>{{ $b->kursis->pluck('nomor_kursi')->join(', ') }}</td>
                 <td style="font-weight:700">Rp {{ number_format($b->total_harga) }}</td>
                 <td>{{ strtoupper($b->metode_bayar ?? '-') }}</td>

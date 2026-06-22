@@ -17,7 +17,7 @@
             <tbody>
             @forelse($films as $f)
             <tr>
-                <td style="color:rgba(255,255,255,0.3)">{{ $loop->iteration }}</td>
+                <td style="color:rgba(255,255,255,0.3)">{{ $films->firstItem() + $loop->index }}</td>
                 <td style="font-weight:700">{{ $f->judul }}</td>
                 <td><span class="badge-info">{{ $f->genre }}</span></td>
                 <td>{{ $f->durasi }} menit</td>
